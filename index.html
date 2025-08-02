@@ -1,115 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Venxx Digest Library</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(270deg, #2c3e50, #4ca1af);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      transition: background 0.5s ease;
-      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(to right, #3e1e68, #9e3ffd, #f0d000);
+      color: white;
+      transition: background 0.5s, color 0.5s;
     }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    .dark-mode {
+      background: #121212;
+      color: #f5f5f5;
     }
 
     header {
       padding: 20px;
       text-align: center;
       font-size: 2.5em;
-      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: gold;
     }
 
     .tabs {
       display: flex;
       justify-content: center;
-      margin-bottom: 20px;
+      padding: 10px;
     }
 
     .tab {
-      background-color: #2980b9;
-      border: none;
-      color: white;
-      padding: 10px 20px;
       margin: 0 10px;
-      font-size: 1em;
       cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
+      font-weight: bold;
+      background: #444;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: background 0.3s;
     }
 
     .tab:hover {
-      background-color: #3498db;
+      background: #666;
     }
 
     .books {
-      display: flex;
+      display: none;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
       padding: 20px;
     }
 
+    .books.active {
+      display: flex;
+    }
+
     .book {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      margin: 15px;
       padding: 15px;
-      width: 200px;
       text-align: center;
-      transition: transform 0.3s ease, background 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      width: 200px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      transition: transform 0.3s;
     }
 
     .book:hover {
       transform: scale(1.05);
-      background-color: rgba(255, 255, 255, 0.2);
     }
 
     .book img {
-      width: 100%;
+      max-width: 100%;
       height: auto;
-      max-height: 300px;
-      object-fit: contain;
-      border-radius: 8px;
+      border-radius: 10px;
     }
 
-    .book h3 {
-      margin: 10px 0 5px;
-    }
-
-    .book p {
-      margin: 0 0 10px;
+    .book h3, .book p {
+      font-weight: bold;
+      color: rgb(255, 215, 0);
     }
 
     .book a {
       display: inline-block;
-      padding: 8px 12px;
-      background-color: #27ae60;
-      color: white;
+      margin-top: 10px;
+      background: gold;
+      color: black;
+      padding: 5px 15px;
       text-decoration: none;
       border-radius: 5px;
-      transition: background-color 0.3s ease;
+      font-weight: bold;
     }
 
-    .book a:hover {
-      background-color: #2ecc71;
-    }
-
-    #toggle-container {
-      position: fixed;
+    .toggle {
+      position: absolute;
       top: 20px;
       right: 20px;
-      z-index: 999;
     }
 
     .switch {
@@ -128,46 +117,36 @@
     .slider {
       position: absolute;
       cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background-color: #ccc;
-      transition: .4s;
+      transition: 0.4s;
       border-radius: 34px;
     }
 
     .slider:before {
       position: absolute;
       content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
+      height: 26px; width: 26px;
+      left: 4px; bottom: 4px;
       background-color: white;
-      transition: .4s;
+      transition: 0.4s;
       border-radius: 50%;
     }
 
     input:checked + .slider {
-      background-color: #4CAF50;
+      background-color: #2196F3;
     }
 
     input:checked + .slider:before {
       transform: translateX(26px);
     }
-
-    .dark-mode {
-      background: linear-gradient(270deg, #000000, #2c3e50);
-      color: #fff;
-    }
   </style>
 </head>
-
 <body>
-  <div id="toggle-container">
+
+  <div class="toggle">
     <label class="switch">
-      <input type="checkbox" id="darkModeToggle">
+      <input type="checkbox" onclick="toggleDarkMode()">
       <span class="slider"></span>
     </label>
   </div>
@@ -175,64 +154,84 @@
   <header>Venxx Digest Library</header>
 
   <div class="tabs">
-    <button class="tab" onclick="showClass('9')">Class 9</button>
-    <button class="tab" onclick="showClass('10')">Class 10</button>
+    <div class="tab" onclick="showTab('class9')">Class 9</div>
+    <div class="tab" onclick="showTab('class10')">Class 10</div>
   </div>
 
-  <div id="class9" class="books">
+  <div id="class9" class="books active">
+    <!-- English -->
     <div class="book">
       <img src="https://m.media-amazon.com/images/I/616uKUJP80L.jpg" alt="English">
       <h3>English</h3>
       <p>Navneet Digest</p>
-      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_a06d95346367409ea9cbb3e912959e0d.pdf" download>Download</a>
+      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_a06d95346367409ea9cbb3e912959e0d.pdf" target="_blank">Download</a>
     </div>
+
+    <!-- Marathi -->
     <div class="book">
       <img src="https://m.media-amazon.com/images/I/61awjzvlUtL._UF1000,1000_QL80_.jpg" alt="Marathi">
       <h3>Marathi</h3>
       <p>Navneet Digest</p>
+      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_1d571758bfc84ff8b1364b4d078b9dfe.pdf" target="_blank">Download</a>
     </div>
+
+    <!-- Math 1 -->
     <div class="book">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm8cfenPFuwxyqcXAAz3tK3fmdLe1h8HMrAg&s" alt="Math 1">
       <h3>Math 1</h3>
       <p>Navneet Digest</p>
+      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_d9c6ba230fc84b9299bf478baa70a6d1.pdf" target="_blank">Download</a>
     </div>
+
+    <!-- Math 2 -->
     <div class="book">
-      <img src="https://images-eu.ssl-images-amazon.com/images/I/61F3SRWyfjL._AC_UL210_SR210,210_.jpg" alt="Math 2">
+      <img src="https://m.media-amazon.com/images/I/61F3SRWyfjL.jpg" alt="Math 2">
       <h3>Math 2</h3>
       <p>Navneet Digest</p>
+      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_5bf5ebedab624a818cd6b05f814594d7.pdf" target="_blank">Download</a>
     </div>
+
+    <!-- Science -->
     <div class="book">
       <img src="https://m.media-amazon.com/images/I/51T4v6BuM3L._UF1000,1000_QL80_.jpg" alt="Science">
       <h3>Science</h3>
       <p>Navneet Digest</p>
+      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_e7eb9ab355d340139decb1a3d8536719.pdf" target="_blank">Download</a>
     </div>
+
+    <!-- History & Political Science -->
     <div class="book">
       <img src="https://m.media-amazon.com/images/I/61yxdemnACL.jpg" alt="History and Political Science">
       <h3>History & Political Science</h3>
       <p>Navneet Digest</p>
+      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_9cfeb9c954954d8cb6347439b6d4e872.pdf" target="_blank">Download</a>
     </div>
+
+    <!-- Geography -->
     <div class="book">
       <img src="https://m.media-amazon.com/images/I/51a63r-q90L._UF1000,1000_QL80_.jpg" alt="Geography">
       <h3>Geography</h3>
       <p>Navneet Digest</p>
+      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_4d2d093c5f0d494ca828d1ea6d20e947.pdf" target="_blank">Download</a>
     </div>
   </div>
 
-  <div id="class10" class="books" style="display: none;">
-    <!-- Future Class 10 Books -->
+  <div id="class10" class="books">
+    <h2>Coming soon...</h2>
   </div>
 
   <script>
-    const toggle = document.getElementById('darkModeToggle');
-    toggle.addEventListener('change', () => {
-      document.body.classList.toggle('dark-mode');
-    });
+    function showTab(id) {
+      document.querySelectorAll('.books').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    }
 
-    function showClass(classNum) {
-      document.getElementById('class9').style.display = classNum === '9' ? 'flex' : 'none';
-      document.getElementById('class10').style.display = classNum === '10' ? 'flex' : 'none';
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
     }
   </script>
-</body>
 
+</body>
 </html>
