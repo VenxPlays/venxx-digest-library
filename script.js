@@ -1,5 +1,63 @@
-// --- No Demo Questions ---
+// --- 10 Real Questions as per your latest message ---
 let userName = null;
+
+const DEMO_QUESTIONS = [
+  {
+    text: "The National Archives of India is situated at _______.",
+    options: ["Pune", "New Delhi", "Kolkata", "Hyderabad"],
+    answer: 1
+  },
+  {
+    text: "______ are considered the fourth pillar of democracy in the modern period.",
+    options: ["Newspapers", "Reference books", "Doordarshan", "Postage stamps"],
+    answer: 0
+  },
+  {
+    text: "_______ is not included in physical sources.",
+    options: ["Coins", "Ornaments", "Buildings", "Proverbs"],
+    answer: 3
+  },
+  {
+    text: "________ has been given the responsibility to print currency notes in India.",
+    options: ["Reserve Bank of India", "State Bank of India", "Bank of India", "Indian Bank"],
+    answer: 0
+  },
+  {
+    text: "Activists during the Sanyukta Maharashtra Movement were inspired by the ______.",
+    options: ["rajmudra", "street plays", "powadas", "museums"],
+    answer: 2
+  },
+  {
+    text: "The ______ is included among the AudioVisual media.",
+    options: ["Newspaper", "Television", "All India Radio", "Periodicals"],
+    answer: 1
+  },
+  {
+    text: "Who was the first President of independent India?",
+    options: ["Pandit Jawaharlal Nehru", "Dr. Rajendra Prasad", "Dr. B. R. Ambedkar", "Mahatma Gandhi"],
+    answer: 1
+  },
+  {
+    text: "Which planet is known as the Red Planet?",
+    options: ["Venus", "Saturn", "Mars", "Jupiter"],
+    answer: 2
+  },
+  {
+    text: "Which is the largest organ in the human body?",
+    options: ["Heart", "Skin", "Liver", "Lungs"],
+    answer: 1
+  },
+  {
+    text: "What is the capital city of Maharashtra?",
+    options: ["Nagpur", "Pune", "Mumbai", "Nashik"],
+    answer: 2
+  }
+];
+
+// Populate demo questions if not already present
+if (!localStorage.getItem('quiz-questions') || JSON.parse(localStorage.getItem('quiz-questions')).length === 0) {
+  localStorage.setItem('quiz-questions', JSON.stringify(DEMO_QUESTIONS));
+}
 
 // --- HELPERS ---
 function showLoginFeedback(msg) { document.getElementById('login-feedback').innerText = msg; }
