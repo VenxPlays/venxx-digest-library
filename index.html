@@ -1,256 +1,535 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<div id="password-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, #3e1e68, #9e3ffd, #f0d000); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;">
-  <h2 style="color: gold; font-family: 'Orbitron', sans-serif;">Enter Password to Access</h2>
-  <input type="password" id="password-input" placeholder="Enter password..." style="padding: 10px; font-size: 16px; border-radius: 8px; border: none; margin-top: 10px;">
-  <button onclick="checkPassword()" style="margin-top: 10px; padding: 10px 20px; font-size: 16px; font-weight: bold; border-radius: 8px; border: none; background: gold; color: black; cursor: pointer;">Enter</button>
-  <p id="error-message" style="color: red; margin-top: 10px;"></p>
-</div>
-
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Venxx Digest Library</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@500&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
+    :root {
+      --primary: #a259ff;
+      --secondary: #f6d365;
+      --glass-bg: rgba(34, 34, 50, 0.68);
+      --glass-bg-light: rgba(255,255,255,0.18);
+      --frost: blur(14px);
+      --accent: #54e6af;
+      --danger: #ff6978;
+      --radius: 22px;
+      --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Montserrat', 'Orbitron', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #23235b 0%, #a259ff 65%, #f6d365 100%);
+      color: #fff;
+      transition: background 0.6s;
+      scroll-behavior: smooth;
+    }
+    /* Navbar */
+    nav {
+      width: 100vw;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 3vw;
+      background: var(--glass-bg);
+      box-shadow: var(--shadow);
+      backdrop-filter: var(--frost);
+      animation: navFade 0.6s;
+    }
+    @keyframes navFade {
+      from { opacity:0; transform:translateY(-40px);}
+      to { opacity:1; transform:none;}
+    }
+    nav .logo {
       font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(to right, #3e1e68, #9e3ffd, #f0d000);
-      color: white;
-      transition: background 0.5s, color 0.5s;
-    }
-
-    .dark-mode {
-      background: #121212;
-      color: #f5f5f5;
-    }
-
-    header {
-      padding: 20px;
-      text-align: center;
-      font-size: 2.5em;
+      font-size: 2rem;
       font-weight: 700;
-      color: gold;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: center;
-      padding: 10px;
-    }
-
-    .tab {
-      margin: 0 10px;
+      color: var(--secondary);
+      letter-spacing: 2px;
+      text-shadow: 0 0 12px #a259ff55;
       cursor: pointer;
-      font-weight: bold;
-      background: #444;
-      padding: 10px 20px;
-      border-radius: 8px;
-      transition: background 0.3s;
+      user-select: none;
+    }
+    nav .nav-links {
+      display: flex;
+      gap: 2vw;
+      align-items: center;
+    }
+    nav .nav-links button, nav .nav-links a {
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 1em;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      transition: color .2s, background .2s;
+      padding: 7px 18px;
+      border-radius: 16px;
+      outline: none;
+    }
+    nav .nav-links button.active, nav .nav-links a.active, nav .nav-links button:hover, nav .nav-links a:hover {
+      background: var(--glass-bg-light);
+      color: var(--accent);
     }
 
-    .tab:hover {
-      background: #666;
+    /* Page container */
+    #container {
+      width: 100vw; min-height: 100vh;
+      padding-top: 80px;
+      transition: background .7s;
     }
 
-    .books {
-      display: none;
+    /* Auth panel */
+    .auth-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 65vh;
+      margin: 0 auto;
+      max-width: 420px;
+      padding: 38px 28px 46px 28px;
+      background: var(--glass-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: var(--frost);
+      margin-top: 8vh;
+      animation: fadeInScale .7s;
+    }
+    @keyframes fadeInScale {
+      from { opacity:0; transform:scale(.92);}
+      to { opacity:1; transform:scale(1);}
+    }
+    .auth-panel h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+      font-size: 2em;
+      text-shadow: 0 2px 20px #a259ff22;
+      font-weight: 800;
+    }
+    .auth-panel label {
+      font-size: 1.05em;
+      margin-bottom: 0.7em;
+      color: #fff;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+    .auth-panel input {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 13px;
+      border: none;
+      outline: none;
+      background: var(--glass-bg-light);
+      font-size: 1em;
+      margin-bottom: 16px;
+      color: #fff;
+      transition: background .18s;
+      box-shadow: 0 1px 8px #0002;
+    }
+    .auth-panel input:focus { background: #fff2; color: #fff; }
+    .auth-panel .switch-link {
+      background: none;
+      color: var(--secondary);
+      border: none;
+      margin-top: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 1em;
+      transition: color .18s;
+    }
+    .auth-panel button[type="submit"] {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      color: #23235b;
+      font-weight: 700;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 0;
+      margin-top: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px #a259ff55;
+      transition: box-shadow .18s, background .18s;
+    }
+    .auth-panel button[type="submit"]:hover {
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      color: #fff;
+      box-shadow: 0 8px 32px #a259ff99;
+    }
+    /* Digest Cards */
+    .digest-list {
+      display: flex;
       flex-wrap: wrap;
+      gap: 32px;
       justify-content: center;
-      padding: 20px;
+      margin: 40px auto 0 auto;
+      max-width: 1080px;
+      padding-bottom: 72px;
+      min-height: 300px;
+      animation: fadeInCards .7s;
     }
-
-    .books.active {
+    @keyframes fadeInCards {
+      from { opacity:0; transform:translateY(35px);}
+      to { opacity:1; transform:none;}
+    }
+    .digest-card {
+      min-width: 270px;
+      max-width: 320px;
       display: flex;
-    }
-
-    .book {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      margin: 15px;
-      padding: 15px;
-      text-align: center;
-      width: 200px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      transition: transform 0.3s;
-    }
-
-    .book:hover {
-      transform: scale(1.05);
-    }
-
-    .book img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 10px;
-    }
-
-    .book h3, .book p {
-      font-weight: bold;
-      color: rgb(255, 215, 0);
-    }
-
-    .book a {
-      display: inline-block;
-      margin-top: 10px;
-      background: gold;
-      color: black;
-      padding: 5px 15px;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-
-    .toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-    }
-
-    .switch {
+      flex-direction: column;
+      background: var(--glass-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 22px 18px 22px;
       position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
+      transition: transform .23s cubic-bezier(.72,0,.25,1), box-shadow .17s;
+      backdrop-filter: var(--frost);
+      margin-bottom: 12px;
+      animation: fadeInScale .7s;
     }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
+    .digest-card:hover {
+      transform: scale(1.035) translateY(-4px);
+      box-shadow: 0 12px 40px #54e6af44;
     }
-
-    .slider {
-      position: absolute;
+    .digest-title {
+      font-family: 'Orbitron',sans-serif;
+      font-size: 1.25em;
+      color: var(--accent);
+      font-weight: bold;
+      letter-spacing: 1.1px;
+      margin-bottom: 8px;
+      margin-top: 0;
+    }
+    .digest-desc {
+      color: #fff;
+      font-size: 1em;
+      margin-bottom: 12px;
+      text-shadow: 0 3px 12px #0002;
+    }
+    .digest-meta {
+      color: #eee;
+      font-size: .96em;
+      margin-bottom: 13px;
+      opacity: 0.7;
+    }
+    .digest-download {
+      margin-top: auto;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      color: #23235b;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 0;
       cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #ccc;
-      transition: 0.4s;
-      border-radius: 34px;
+      font-size: 1.08em;
+      box-shadow: 0 2px 12px #a259ff44;
+      transition: background .15s, color .15s, box-shadow .15s;
+      text-decoration: none;
+      text-align: center;
+      display: block;
+    }
+    .digest-download:hover {
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      color: #fff;
+      box-shadow: 0 6px 22px #a259ff88;
+    }
+    /* Admin upload panel */
+    .admin-panel {
+      max-width: 470px;
+      margin: 36px auto 0 auto;
+      background: var(--glass-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 36px 32px 28px 32px;
+      animation: fadeInScale .7s;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      backdrop-filter: var(--frost);
+    }
+    .admin-panel label {
+      font-size: 1.07em;
+      margin-bottom: 3px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .admin-panel input, .admin-panel textarea {
+      width: 100%;
+      padding: 13px 12px;
+      border-radius: 11px;
+      border: none;
+      outline: none;
+      background: var(--glass-bg-light);
+      font-size: 1em;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .admin-panel textarea { min-height: 60px; resize: vertical; }
+    .admin-panel button {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      color: #23235b;
+      font-weight: 700;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 0;
+      margin-top: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px #a259ff55;
+      transition: box-shadow .18s, background .18s;
+    }
+    .admin-panel button:hover {
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      color: #fff;
+      box-shadow: 0 8px 32px #a259ff99;
     }
 
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px; width: 26px;
-      left: 4px; bottom: 4px;
-      background-color: white;
-      transition: 0.4s;
+    /* Loading animation */
+    #loading {
+      position: fixed;
+      width: 100vw; height: 100vh;
+      top: 0; left: 0;
+      display: flex;
+      align-items: center; justify-content: center;
+      background: rgba(34,34,50,0.92);
+      z-index: 1000;
+      animation: fadeInScale .6s;
+    }
+    .loader {
+      border: 6px solid #a259ff55;
+      border-top: 6px solid var(--accent);
       border-radius: 50%;
+      width: 62px;
+      height: 62px;
+      animation: spin 1.1s linear infinite;
+      box-shadow: 0 0 16px #54e6af44, 0 0 24px #a259ff33;
     }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    input:checked + .slider {
-      background-color: #2196F3;
+    /* Toasts */
+    #toast {
+      position: fixed;
+      bottom: 32px; left: 50%; transform:translateX(-50%);
+      min-width: 140px;
+      max-width: 88vw;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      color: #23235b;
+      padding: 15px 34px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 1.1em;
+      box-shadow: 0 2px 24px #a259ff88;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 999;
+      transition: opacity .3s;
+      text-align: center;
+      letter-spacing: 1px;
+      user-select:none;
     }
+    #toast.show { opacity: 1; pointer-events:auto; animation: toastIn .7s; }
+    @keyframes toastIn { from {opacity:0;transform:translateY(40px);} to {opacity:1;transform:none;} }
 
-    input:checked + .slider:before {
-      transform: translateX(26px);
+    /* Responsive */
+    @media (max-width: 800px) {
+      nav .logo { font-size: 1.2em; }
+      nav .nav-links button { font-size: .97em; padding: 7px 8px;}
+      .digest-list { gap: 16px; max-width: 96vw;}
+      .digest-card { min-width: 90vw; max-width: 97vw; padding: 17px 10px;}
+      .admin-panel, .auth-panel { max-width: 100vw; margin: 22px 1vw 0 1vw; padding: 27px 6vw;}
+    }
+    @media (max-width: 450px) {
+      nav { padding: 10px 2vw;}
+      #toast { font-size: .96em; }
     }
   </style>
 </head>
 <body>
-
-  <div class="toggle">
-    <label class="switch">
-      <input type="checkbox" onclick="toggleDarkMode()">
-      <span class="slider"></span>
-    </label>
+  <!-- Loading overlay -->
+  <div id="loading" style="display:none;">
+    <div class="loader"></div>
   </div>
-
-  <header>Venxx Digest Library</header>
-
-  <div class="tabs">
-    <div class="tab" onclick="showTab('class9')">Class 9</div>
-    <div class="tab" onclick="showTab('class10')">Class 10</div>
-  </div>
-
-  <div id="class9" class="books active">
-    <!-- English -->
-    <div class="book">
-      <img src="https://m.media-amazon.com/images/I/616uKUJP80L.jpg" alt="English">
-      <h3>English</h3>
-      <p>Navneet Digest</p>
-      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_a06d95346367409ea9cbb3e912959e0d.pdf" target="_blank">Download</a>
+  <!-- Toast notification -->
+  <div id="toast"></div>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo" onclick="goto('home')">Venxx Digest Library</div>
+    <div class="nav-links" id="nav-links">
+      <!-- Dynamically rendered -->
     </div>
-
-    <!-- Marathi -->
-    <div class="book">
-      <img src="https://m.media-amazon.com/images/I/61awjzvlUtL._UF1000,1000_QL80_.jpg" alt="Marathi">
-      <h3>Marathi</h3>
-      <p>Navneet Digest</p>
-      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_1d571758bfc84ff8b1364b4d078b9dfe.pdf" target="_blank">Download</a>
-    </div>
-
-    <!-- Math 1 -->
-    <div class="book">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm8cfenPFuwxyqcXAAz3tK3fmdLe1h8HMrAg&s" alt="Math 1">
-      <h3>Math 1</h3>
-      <p>Navneet Digest</p>
-      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_d9c6ba230fc84b9299bf478baa70a6d1.pdf" target="_blank">Download</a>
-    </div>
-
-    <!-- Math 2 -->
-    <div class="book">
-      <img src="https://m.media-amazon.com/images/I/61F3SRWyfjL.jpg" alt="Math 2">
-      <h3>Math 2</h3>
-      <p>Navneet Digest</p>
-      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_5bf5ebedab624a818cd6b05f814594d7.pdf" target="_blank">Download</a>
-    </div>
-
-    <!-- Science -->
-    <div class="book">
-      <img src="https://m.media-amazon.com/images/I/51T4v6BuM3L._UF1000,1000_QL80_.jpg" alt="Science">
-      <h3>Science</h3>
-      <p>Navneet Digest</p>
-      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_e7eb9ab355d340139decb1a3d8536719.pdf" target="_blank">Download</a>
-    </div>
-
-    <!-- History & Political Science -->
-    <div class="book">
-      <img src="https://m.media-amazon.com/images/I/61yxdemnACL.jpg" alt="History and Political Science">
-      <h3>History & Political Science</h3>
-      <p>Navneet Digest</p>
-      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_9cfeb9c954954d8cb6347439b6d4e872.pdf" target="_blank">Download</a>
-    </div>
-
-    <!-- Geography -->
-    <div class="book">
-      <img src="https://m.media-amazon.com/images/I/51a63r-q90L._UF1000,1000_QL80_.jpg" alt="Geography">
-      <h3>Geography</h3>
-      <p>Navneet Digest</p>
-      <a href="https://3dc9f34f-796d-48f8-a95a-419ecf523817.filesusr.com/ugd/0a4010_4d2d093c5f0d494ca828d1ea6d20e947.pdf" target="_blank">Download</a>
-    </div>
-  </div>
-
-  <div id="class10" class="books">
-    <h2>Coming soon...</h2>
-  </div>
-
+  </nav>
+  <!-- Page content -->
+  <div id="container"></div>
   <script>
-    function showTab(id) {
-      document.querySelectorAll('.books').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      document.getElementById(id).classList.add('active');
+    // --- Helpers ---
+    function showLoading(show=true) {
+      document.getElementById('loading').style.display = show ? "flex" : "none";
     }
-
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark-mode');
+    function showToast(msg, duration=2300) {
+      let toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'), duration);
     }
-  </script>
-<script>
-  function checkPassword() {
-    const password = document.getElementById('password-input').value;
-    const error = document.getElementById('error-message');
-
-    if (password === "books") {
-      document.getElementById('password-screen').style.display = 'none';
-    } else {
-      error.textContent = "Incorrect password. Try again.";
+    function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+    function formatDate(d) {
+      if (!d) return "";
+      d = new Date(d);
+      let y = d.getFullYear(), m = d.getMonth()+1, da = d.getDate();
+      return [y, (m+"").padStart(2,"0"), (da+"").padStart(2,"0")].join('-');
     }
-  }
-</script>
-
-</body>
-</html>
+    // --- Auth/Users ---
+    let user = JSON.parse(localStorage.getItem('venxx-user') || "null");
+    let users = JSON.parse(localStorage.getItem('venxx-users') || "[]");
+    // Only for demo: default admin
+    if (!users.find(u=>u.username==="admin")) {
+      users.push({username:"admin",password:"admin123",admin:true});
+      localStorage.setItem('venxx-users', JSON.stringify(users));
+    }
+    function saveUsers() { localStorage.setItem('venxx-users', JSON.stringify(users)); }
+    function saveUser() { localStorage.setItem('venxx-user', JSON.stringify(user)); }
+    function signUp(username, password) {
+      if (users.find(u=>u.username===username)) return "Username already exists";
+      users.push({username, password, admin: false});
+      saveUsers();
+      return true;
+    }
+    function signIn(username, password) {
+      let u = users.find(u=>u.username===username && u.password===password);
+      if (!u) return "Invalid credentials";
+      user = {...u};
+      saveUser();
+      return true;
+    }
+    function signOut() {
+      user = null;
+      localStorage.removeItem('venxx-user');
+      showToast("Logged out!");
+      goto('auth');
+    }
+    // --- Digest Storage ---
+    function getDigests() {
+      return JSON.parse(localStorage.getItem('venxx-digests') || "[]");
+    }
+    function saveDigests(digests) {
+      localStorage.setItem('venxx-digests', JSON.stringify(digests));
+    }
+    // --- Navigation ---
+    function renderNav() {
+      let nav = document.getElementById('nav-links');
+      nav.innerHTML = "";
+      if (user) {
+        nav.innerHTML += `<button onclick="goto('home')" class="${page==='home'?'active':''}">Home</button>`;
+        if (user.admin)
+          nav.innerHTML += `<button onclick="goto('admin')" class="${page==='admin'?'active':''}">Admin</button>`;
+        nav.innerHTML += `<button onclick="signOut()">Logout</button>`;
+        nav.innerHTML += `<span style="color:var(--accent);font-weight:700;font-size:1em;padding-left:11px;">${user.admin?"Admin":"User"}: ${user.username}</span>`;
+      } else {
+        nav.innerHTML += `<button onclick="goto('auth')" class="${page==='auth'?'active':''}">Sign In</button>`;
+      }
+    }
+    // --- Page Rendering ---
+    let page = "auth";
+    async function goto(p) {
+      if (page===p) return;
+      showLoading(true);
+      await sleep(350 + Math.random()*200);
+      page = p;
+      renderNav();
+      document.getElementById('container').innerHTML = "";
+      if (p==='auth') renderAuth();
+      else if (p==='home') renderHome();
+      else if (p==='admin') renderAdmin();
+      showLoading(false);
+    }
+    // --- Auth Page ---
+    function renderAuth() {
+      document.getElementById('container').innerHTML = `
+        <div class="auth-panel" id="auth-panel">
+          <h2 id="auth-title">Sign In</h2>
+          <form id="auth-form">
+            <label for="auth-username">Username</label>
+            <input id="auth-username" type="text" autocomplete="username" required maxlength="16"/>
+            <label for="auth-password">Password</label>
+            <input id="auth-password" type="password" autocomplete="current-password" required maxlength="24"/>
+            <button type="submit" id="auth-btn">Sign In</button>
+          </form>
+          <button class="switch-link" id="switch-auth">Don't have an account? Sign Up</button>
+        </div>
+      `;
+      let signInMode = true;
+      document.getElementById('switch-auth').onclick = ()=>{
+        signInMode = !signInMode;
+        document.getElementById('auth-title').innerText = signInMode?"Sign In":"Sign Up";
+        document.getElementById('auth-btn').innerText = signInMode?"Sign In":"Sign Up";
+        document.getElementById('switch-auth').innerText = signInMode?"Don't have an account? Sign Up":"Already have an account? Sign In";
+      }
+      document.getElementById('auth-form').onsubmit = async (e)=>{
+        e.preventDefault();
+        let username = document.getElementById('auth-username').value.trim();
+        let password = document.getElementById('auth-password').value;
+        if (!username.match(/^[a-zA-Z0-9_]{3,16}$/)) {
+          showToast("Username: 3-16 chars, letters, numbers or _");
+          return;
+        }
+        showLoading(true);
+        await sleep(550);
+        if (signInMode) {
+          let res = signIn(username,password);
+          if (res!==true) {
+            showLoading(false); showToast(res); return;
+          }
+          showLoading(false);
+          showToast("Login Success!");
+          goto('home');
+        } else {
+          if (password.length<6) {
+            showLoading(false); showToast("Password: at least 6 chars"); return;
+          }
+          let res = signUp(username,password);
+          if (res!==true) {
+            showLoading(false); showToast(res); return;
+          }
+          showLoading(false);
+          showToast("Sign up Success! Please sign in.");
+          signInMode = true;
+          document.getElementById('auth-title').innerText = "Sign In";
+          document.getElementById('auth-btn').innerText = "Sign In";
+          document.getElementById('switch-auth').innerText = "Don't have an account? Sign Up";
+        }
+      };
+    }
+    // --- Home Page ---
+    function renderHome() {
+      let digests = getDigests();
+      if (!digests.length) {
+        document.getElementById('container').innerHTML = `<div style="text-align:center;margin-top:65px;font-size:1.2em;">No digests uploaded yet.</div>`;
+        return;
+      }
+      let s = `<div class="digest-list">`;
+      digests.sort((a,b)=>b.uploadedAt-a.uploadedAt);
+      for (let d of digests) {
+        s += `
+          <div class="digest-card">
+            <div class="digest-title">${d.title}</div>
+            <div class="digest-desc">${d.desc}</div>
+            <div class="digest-meta">Uploaded: ${formatDate(d.uploadedAt)}</div>
+            <a class="digest-download" href="${d.url}" target="_blank" download>Download</a>
+          </div>
+        `;
+      }
+      s += `</div>`;
+      document.getElementById('container').innerHTML = s;
+    }
+    // --- Admin Page ---
+    function renderAdmin() {
+      document
