@@ -1,61 +1,293 @@
-// --- 10 Real Questions as per your latest message ---
+// --- Punjab/North-East MCQs as provided by user ---
 let userName = null;
 
 const DEMO_QUESTIONS = [
   {
-    text: "The National Archives of India is situated at _______.",
-    options: ["Pune", "New Delhi", "Kolkata", "Hyderabad"],
+    text: "Which political party was majorly involved in Punjab unrest in 1973?",
+    options: [
+      "Indian National Congress",
+      "Bharatiya Janata Party",
+      "Akali Dal",
+      "Communist Party of India"
+    ],
+    answer: 2
+  },
+  {
+    text: "Which document demanded Chandigarh as Punjab’s capital and more autonomy for Punjab?",
+    options: [
+      "Shimla Agreement",
+      "Anandpur Sahib Resolution",
+      "Assam Accord",
+      "Nagaland Peace Accord"
+    ],
     answer: 1
   },
   {
-    text: "______ are considered the fourth pillar of democracy in the modern period.",
-    options: ["Newspapers", "Reference books", "Doordarshan", "Postage stamps"],
+    text: "The demand for ‘Independent Khalistan’ was led by which leader?",
+    options: [
+      "Sant Jarnail Singh Bhindranwale",
+      "Jawaharlal Nehru",
+      "Laldenga",
+      "H.S. Phoolka"
+    ],
     answer: 0
   },
   {
-    text: "_______ is not included in physical sources.",
-    options: ["Coins", "Ornaments", "Buildings", "Proverbs"],
+    text: "Who was accused of violence and led the Akal Takht group during the Punjab unrest?",
+    options: [
+      "Sant Harcharan Singh Longowal",
+      "Laldenga",
+      "Sant Jarnail Singh Bhindranwale",
+      "Prafulla Kumar Mahanta"
+    ],
+    answer: 2
+  },
+  {
+    text: "Operation Blue Star was aimed at:",
+    options: [
+      "Removing illegal immigrants from Assam",
+      "Removing terrorists from the Golden Temple",
+      "Achieving statehood for Nagaland",
+      "Granting autonomy to Mizoram"
+    ],
+    answer: 1
+  },
+  {
+    text: "Who led Operation Blue Star in 1984?",
+    options: [
+      "General V.K. Singh",
+      "Major General Kuldeep Singh Brar",
+      "General Bipin Rawat",
+      "General K. Sunderji"
+    ],
+    answer: 1
+  },
+  {
+    text: "In which year did Operation Blue Star occur?",
+    options: [
+      "1982",
+      "1983",
+      "1984",
+      "1985"
+    ],
+    answer: 2
+  },
+  {
+    text: "What was Operation Black Thunder?",
+    options: [
+      "Movement for Nagaland’s statehood",
+      "Peace agreement in Assam",
+      "Military operation similar to Blue Star",
+      "Famine relief operation in Mizoram"
+    ],
+    answer: 2
+  },
+  {
+    text: "Which of the following is NOT a North-Eastern state?",
+    options: [
+      "Assam",
+      "Arunachal Pradesh",
+      "Punjab",
+      "Mizoram"
+    ],
+    answer: 2
+  },
+  {
+    text: "The Assam Accord was signed in:",
+    options: [
+      "1983",
+      "1985",
+      "1987",
+      "1990"
+    ],
+    answer: 1
+  },
+  {
+    text: "Which organization led the agitation in Assam over Bangladeshi immigrants?",
+    options: [
+      "Naga National Council",
+      "All Assam Students Union",
+      "Mizo National Front",
+      "Akali Dal"
+    ],
+    answer: 1
+  },
+  {
+    text: "The Naga National Council (NNC) was associated with which demand?",
+    options: [
+      "Statehood for Mizoram",
+      "Independence for Nagaland",
+      "Creation of NEFA",
+      "Assam Accord"
+    ],
+    answer: 1
+  },
+  {
+    text: "Nagaland became a state in:",
+    options: [
+      "1955",
+      "1963",
+      "1972",
+      "1987"
+    ],
+    answer: 1
+  },
+  {
+    text: "Which year did Mizoram become a Union Territory?",
+    options: [
+      "1959",
+      "1966",
+      "1972",
+      "1985"
+    ],
+    answer: 2
+  },
+  {
+    text: "The famine of 1959 led to the formation of which organization in Mizoram?",
+    options: [
+      "All Assam Students Union",
+      "Naga National Council",
+      "Mizo National Front",
+      "Akali Dal"
+    ],
+    answer: 2
+  },
+  {
+    text: "When did Arunachal Pradesh become a full-fledged state?",
+    options: [
+      "1954",
+      "1972",
+      "1987",
+      "1991"
+    ],
+    answer: 2
+  },
+  {
+    text: "What does NEFA stand for?",
+    options: [
+      "North-Eastern Frontier Area",
+      "North-East Federal Agreement",
+      "North-East Finance Authority",
+      "North-East Frontier Agency"
+    ],
     answer: 3
   },
   {
-    text: "________ has been given the responsibility to print currency notes in India.",
-    options: ["Reserve Bank of India", "State Bank of India", "Bank of India", "Indian Bank"],
+    text: "Which Act was passed in 1971 for advising on North-East issues?",
+    options: [
+      "Assam Accord",
+      "Northeastern Council Act",
+      "NEFA Act",
+      "Operation Blue Star"
+    ],
+    answer: 1
+  },
+  {
+    text: "Who signed the Assam Accord?",
+    options: [
+      "Sant Jarnail Singh Bhindranwale",
+      "Laldenga",
+      "All Assam Students Union and Government of India",
+      "Akali Dal"
+    ],
+    answer: 2
+  },
+  {
+    text: "A military expedition for a specific objective is called:",
+    options: [
+      "Agitation",
+      "Operation",
+      "Accord",
+      "Resolution"
+    ],
+    answer: 1
+  },
+
+  // Full Forms & Abbreviations
+  {
+    text: "What is the full form of NEFA?",
+    options: [
+      "North-East Federal Agreement",
+      "North-East Frontier Agency",
+      "North-East Finance Association",
+      "North-Eastern Frontier Area"
+    ],
+    answer: 1
+  },
+  {
+    text: "What does MNF stand for in Mizoram’s history?",
+    options: [
+      "Mizoram National Foundation",
+      "Mizoram National Front",
+      "Mizo National Front",
+      "Mizo National Federation"
+    ],
+    answer: 2
+  },
+  {
+    text: "What is the full form of NNC?",
+    options: [
+      "North National Council",
+      "Naga National Council",
+      "North-East National Council",
+      "Nagaland National Committee"
+    ],
+    answer: 1
+  },
+  {
+    text: "What does AASU stand for in the context of Assam?",
+    options: [
+      "All Assam Students Union",
+      "Assam Agricultural Science University",
+      "Assam Association of Student Unions",
+      "Assam All Students Union"
+    ],
     answer: 0
   },
   {
-    text: "Activists during the Sanyukta Maharashtra Movement were inspired by the ______.",
-    options: ["rajmudra", "street plays", "powadas", "museums"],
-    answer: 2
+    text: "What is the full form of the Act passed in 1971 for North-East India?",
+    options: [
+      "Northeastern Council Act",
+      "North-East Council Assembly",
+      "North-East Federal Accord",
+      "Northeast Community Act"
+    ],
+    answer: 0
   },
   {
-    text: "The ______ is included among the AudioVisual media.",
-    options: ["Newspaper", "Television", "All India Radio", "Periodicals"],
+    text: "What does ‘NE’ stand for in NEFA?",
+    options: [
+      "North-East",
+      "North-Eastern",
+      "New Era",
+      "National Education"
+    ],
     answer: 1
   },
   {
-    text: "Who was the first President of independent India?",
-    options: ["Pandit Jawaharlal Nehru", "Dr. Rajendra Prasad", "Dr. B. R. Ambedkar", "Mahatma Gandhi"],
+    text: "What is the full form of ‘Akal Takht’ as seen in Punjab unrest?",
+    options: [
+      "Akali Takht",
+      "Akal Takht (No abbreviation, it is a Sikh institution)",
+      "Akal Training Akademy",
+      "Akal Tactical Headquarter"
+    ],
     answer: 1
   },
   {
-    text: "Which planet is known as the Red Planet?",
-    options: ["Venus", "Saturn", "Mars", "Jupiter"],
-    answer: 2
-  },
-  {
-    text: "Which is the largest organ in the human body?",
-    options: ["Heart", "Skin", "Liver", "Lungs"],
-    answer: 1
-  },
-  {
-    text: "What is the capital city of Maharashtra?",
-    options: ["Nagpur", "Pune", "Mumbai", "Nashik"],
-    answer: 2
+    text: "What does ‘MNF’ stand for in the 1959 Mizoram famine context?",
+    options: [
+      "Mizo National Front",
+      "Mizoram National Federation",
+      "Mizoram New Front",
+      "Mizo National Federation"
+    ],
+    answer: 0
   }
 ];
 
-// Populate demo questions if not already present
-if (!localStorage.getItem('quiz-questions') || JSON.parse(localStorage.getItem('quiz-questions')).length === 0) {
+// Populate demo questions if not already present or override if count differs
+if (!localStorage.getItem('quiz-questions') || JSON.parse(localStorage.getItem('quiz-questions')).length !== DEMO_QUESTIONS.length) {
   localStorage.setItem('quiz-questions', JSON.stringify(DEMO_QUESTIONS));
 }
 
