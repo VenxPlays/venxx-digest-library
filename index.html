@@ -1,535 +1,297 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-gradient-to-br from-gray-900 via-gray-800 to-black">
 <head>
   <meta charset="UTF-8" />
-  <title>Venxx Digest Library</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>DiamondStudiesQuiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --primary: #a259ff;
-      --secondary: #f6d365;
-      --glass-bg: rgba(34, 34, 50, 0.68);
-      --glass-bg-light: rgba(255,255,255,0.18);
-      --frost: blur(14px);
-      --accent: #54e6af;
-      --danger: #ff6978;
-      --radius: 22px;
-      --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    body { font-family: 'Montserrat', 'Orbitron', ui-sans-serif, system-ui, sans-serif; }
+    .glass {
+      background: rgba(31,41,55,0.62);
+      box-shadow: 0 8px 32px 0 rgba(31,41,55,0.37);
+      backdrop-filter: blur(14px);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(89,255,255,0.11);
     }
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0; padding: 0;
-      font-family: 'Montserrat', 'Orbitron', sans-serif;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #23235b 0%, #a259ff 65%, #f6d365 100%);
-      color: #fff;
-      transition: background 0.6s;
-      scroll-behavior: smooth;
+    .neon {
+      text-shadow: 0 0 8px #00fff7, 0 0 2px #00fff7;
     }
-    /* Navbar */
-    nav {
-      width: 100vw;
-      position: fixed;
-      top: 0; left: 0;
-      z-index: 50;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 3vw;
-      background: var(--glass-bg);
-      box-shadow: var(--shadow);
-      backdrop-filter: var(--frost);
-      animation: navFade 0.6s;
-    }
-    @keyframes navFade {
-      from { opacity:0; transform:translateY(-40px);}
-      to { opacity:1; transform:none;}
-    }
-    nav .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--secondary);
-      letter-spacing: 2px;
-      text-shadow: 0 0 12px #a259ff55;
-      cursor: pointer;
-      user-select: none;
-    }
-    nav .nav-links {
-      display: flex;
-      gap: 2vw;
-      align-items: center;
-    }
-    nav .nav-links button, nav .nav-links a {
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 1em;
-      background: none;
+    .fade-in { animation: fade-in .7s cubic-bezier(.4,0,.2,1);}
+    .pop-in { animation: pop-in .3s cubic-bezier(.4,1.7,.7,.9);}
+    @keyframes fade-in { from { opacity:0; transform:translateY(30px);} to{opacity:1;transform:none;}}
+    @keyframes pop-in { 0% {transform:scale(0.8);} 70% {transform:scale(1.1);} 100% {transform:scale(1);}}
+    .modal-bg { background: rgba(17,24,39,0.93);}
+    .float-label { position:relative;}
+    .float-label input, .float-label select {
+      background:transparent;
       border: none;
+      border-bottom: 2px solid #2dd4bf;
       color: #fff;
-      cursor: pointer;
-      transition: color .2s, background .2s;
-      padding: 7px 18px;
-      border-radius: 16px;
       outline: none;
-    }
-    nav .nav-links button.active, nav .nav-links a.active, nav .nav-links button:hover, nav .nav-links a:hover {
-      background: var(--glass-bg-light);
-      color: var(--accent);
-    }
-
-    /* Page container */
-    #container {
-      width: 100vw; min-height: 100vh;
-      padding-top: 80px;
-      transition: background .7s;
-    }
-
-    /* Auth panel */
-    .auth-panel {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 65vh;
-      margin: 0 auto;
-      max-width: 420px;
-      padding: 38px 28px 46px 28px;
-      background: var(--glass-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: var(--frost);
-      margin-top: 8vh;
-      animation: fadeInScale .7s;
-    }
-    @keyframes fadeInScale {
-      from { opacity:0; transform:scale(.92);}
-      to { opacity:1; transform:scale(1);}
-    }
-    .auth-panel h2 {
-      font-family: 'Orbitron', sans-serif;
-      color: var(--accent);
-      letter-spacing: 2px;
-      margin-bottom: 24px;
-      font-size: 2em;
-      text-shadow: 0 2px 20px #a259ff22;
-      font-weight: 800;
-    }
-    .auth-panel label {
-      font-size: 1.05em;
-      margin-bottom: 0.7em;
-      color: #fff;
-      font-weight: 500;
-      letter-spacing: 1px;
-    }
-    .auth-panel input {
       width: 100%;
-      padding: 13px 16px;
-      border-radius: 13px;
-      border: none;
-      outline: none;
-      background: var(--glass-bg-light);
-      font-size: 1em;
-      margin-bottom: 16px;
-      color: #fff;
-      transition: background .18s;
-      box-shadow: 0 1px 8px #0002;
+      padding: 0.75rem 0 0.5rem 0.1rem;
+      font-size: 1rem;
+      transition: border-bottom-color .2s;
     }
-    .auth-panel input:focus { background: #fff2; color: #fff; }
-    .auth-panel .switch-link {
-      background: none;
-      color: var(--secondary);
-      border: none;
-      margin-top: 12px;
-      cursor: pointer;
-      text-decoration: underline;
-      font-size: 1em;
-      transition: color .18s;
+    .float-label label {
+      position:absolute; top:1rem; left:0.2rem;
+      color:#7dd3fc; pointer-events:none; font-size:1rem;
+      transition: .2s;
     }
-    .auth-panel button[type="submit"] {
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      color: #23235b;
-      font-weight: 700;
-      font-size: 1.1em;
-      border: none;
-      border-radius: 12px;
-      padding: 13px 0;
-      margin-top: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 18px #a259ff55;
-      transition: box-shadow .18s, background .18s;
-    }
-    .auth-panel button[type="submit"]:hover {
-      background: linear-gradient(90deg, var(--accent), var(--primary));
-      color: #fff;
-      box-shadow: 0 8px 32px #a259ff99;
-    }
-    /* Digest Cards */
-    .digest-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 32px;
-      justify-content: center;
-      margin: 40px auto 0 auto;
-      max-width: 1080px;
-      padding-bottom: 72px;
-      min-height: 300px;
-      animation: fadeInCards .7s;
-    }
-    @keyframes fadeInCards {
-      from { opacity:0; transform:translateY(35px);}
-      to { opacity:1; transform:none;}
-    }
-    .digest-card {
-      min-width: 270px;
-      max-width: 320px;
-      display: flex;
-      flex-direction: column;
-      background: var(--glass-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 28px 22px 18px 22px;
-      position: relative;
-      transition: transform .23s cubic-bezier(.72,0,.25,1), box-shadow .17s;
-      backdrop-filter: var(--frost);
-      margin-bottom: 12px;
-      animation: fadeInScale .7s;
-    }
-    .digest-card:hover {
-      transform: scale(1.035) translateY(-4px);
-      box-shadow: 0 12px 40px #54e6af44;
-    }
-    .digest-title {
-      font-family: 'Orbitron',sans-serif;
-      font-size: 1.25em;
-      color: var(--accent);
-      font-weight: bold;
-      letter-spacing: 1.1px;
-      margin-bottom: 8px;
-      margin-top: 0;
-    }
-    .digest-desc {
-      color: #fff;
-      font-size: 1em;
-      margin-bottom: 12px;
-      text-shadow: 0 3px 12px #0002;
-    }
-    .digest-meta {
-      color: #eee;
-      font-size: .96em;
-      margin-bottom: 13px;
-      opacity: 0.7;
-    }
-    .digest-download {
-      margin-top: auto;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      color: #23235b;
-      font-weight: 700;
-      border: none;
-      border-radius: 10px;
-      padding: 11px 0;
-      cursor: pointer;
-      font-size: 1.08em;
-      box-shadow: 0 2px 12px #a259ff44;
-      transition: background .15s, color .15s, box-shadow .15s;
-      text-decoration: none;
-      text-align: center;
-      display: block;
-    }
-    .digest-download:hover {
-      background: linear-gradient(90deg, var(--accent), var(--primary));
-      color: #fff;
-      box-shadow: 0 6px 22px #a259ff88;
-    }
-    /* Admin upload panel */
-    .admin-panel {
-      max-width: 470px;
-      margin: 36px auto 0 auto;
-      background: var(--glass-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 36px 32px 28px 32px;
-      animation: fadeInScale .7s;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      backdrop-filter: var(--frost);
-    }
-    .admin-panel label {
-      font-size: 1.07em;
-      margin-bottom: 3px;
-      color: var(--accent);
+    .float-label input:focus + label,
+    .float-label input:not(:placeholder-shown) + label,
+    .float-label select:focus + label,
+    .float-label select:not([value=""]) + label {
+      top:-0.45rem; font-size:0.82rem; color:#0fffc3;
       font-weight: 600;
+      letter-spacing: 0.02em;
     }
-    .admin-panel input, .admin-panel textarea {
-      width: 100%;
-      padding: 13px 12px;
-      border-radius: 11px;
-      border: none;
-      outline: none;
-      background: var(--glass-bg-light);
-      font-size: 1em;
-      color: #fff;
-      margin-bottom: 8px;
+    ::-webkit-scrollbar { width: 9px; }
+    ::-webkit-scrollbar-thumb { background: #164e63; border-radius: 99px;}
+    /* Animation for correct/wrong */
+    .option-label {
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, border-color 0.2s, transform .18s;
     }
-    .admin-panel textarea { min-height: 60px; resize: vertical; }
-    .admin-panel button {
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      color: #23235b;
-      font-weight: 700;
-      font-size: 1.1em;
-      border: none;
-      border-radius: 12px;
-      padding: 14px 0;
-      margin-top: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 18px #a259ff55;
-      transition: box-shadow .18s, background .18s;
+    .option-label.correct {
+      background: #16f47b !important;
+      color: #111 !important;
+      border-color: #16f47b !important;
+      box-shadow: 0 0 18px #16f47bcc, 0 0 2px #16f47b;
+      animation: pop-in .3s;
     }
-    .admin-panel button:hover {
-      background: linear-gradient(90deg, var(--accent), var(--primary));
-      color: #fff;
-      box-shadow: 0 8px 32px #a259ff99;
+    .option-label.wrong {
+      background: #ff5454 !important;
+      color: #fff !important;
+      border-color: #ff5454 !important;
+      box-shadow: 0 0 18px #ff5454cc, 0 0 2px #ff5454;
+      animation: shake .35s;
     }
-
-    /* Loading animation */
-    #loading {
-      position: fixed;
-      width: 100vw; height: 100vh;
-      top: 0; left: 0;
-      display: flex;
-      align-items: center; justify-content: center;
-      background: rgba(34,34,50,0.92);
-      z-index: 1000;
-      animation: fadeInScale .6s;
+    @keyframes shake {
+      0% {transform: translateX(0);}
+      20% {transform: translateX(-5px);}
+      40% {transform: translateX(5px);}
+      60% {transform: translateX(-5px);}
+      80% {transform: translateX(5px);}
+      100% {transform: translateX(0);}
     }
-    .loader {
-      border: 6px solid #a259ff55;
-      border-top: 6px solid var(--accent);
-      border-radius: 50%;
-      width: 62px;
-      height: 62px;
-      animation: spin 1.1s linear infinite;
-      box-shadow: 0 0 16px #54e6af44, 0 0 24px #a259ff33;
+    .option-label.selected {
+      transform: scale(1.05);
     }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-
-    /* Toasts */
-    #toast {
-      position: fixed;
-      bottom: 32px; left: 50%; transform:translateX(-50%);
-      min-width: 140px;
-      max-width: 88vw;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      color: #23235b;
-      padding: 15px 34px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 1.1em;
-      box-shadow: 0 2px 24px #a259ff88;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 999;
-      transition: opacity .3s;
-      text-align: center;
-      letter-spacing: 1px;
-      user-select:none;
+    /* Button pulse for Next */
+    .pulse {
+      animation: pulse 1.1s infinite;
     }
-    #toast.show { opacity: 1; pointer-events:auto; animation: toastIn .7s; }
-    @keyframes toastIn { from {opacity:0;transform:translateY(40px);} to {opacity:1;transform:none;} }
-
-    /* Responsive */
-    @media (max-width: 800px) {
-      nav .logo { font-size: 1.2em; }
-      nav .nav-links button { font-size: .97em; padding: 7px 8px;}
-      .digest-list { gap: 16px; max-width: 96vw;}
-      .digest-card { min-width: 90vw; max-width: 97vw; padding: 17px 10px;}
-      .admin-panel, .auth-panel { max-width: 100vw; margin: 22px 1vw 0 1vw; padding: 27px 6vw;}
-    }
-    @media (max-width: 450px) {
-      nav { padding: 10px 2vw;}
-      #toast { font-size: .96em; }
+    @keyframes pulse {
+      0% {box-shadow: 0 0 0 0 #00fff733;}
+      70% {box-shadow: 0 0 0 10px #00fff71a;}
+      100% {box-shadow: 0 0 0 0 #00fff700;}
     }
   </style>
 </head>
-<body>
-  <!-- Loading overlay -->
-  <div id="loading" style="display:none;">
-    <div class="loader"></div>
-  </div>
-  <!-- Toast notification -->
-  <div id="toast"></div>
-  <!-- Navbar -->
-  <nav>
-    <div class="logo" onclick="goto('home')">Venxx Digest Library</div>
-    <div class="nav-links" id="nav-links">
-      <!-- Dynamically rendered -->
+<body class="min-h-screen flex items-center justify-center">
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-container" class="w-full max-w-md mx-auto glass p-10 mt-10 space-y-7 fade-in">
+    <div class="flex justify-center mb-5">
+      <img src="https://img.icons8.com/fluency/64/quiz.png" alt="Quiz logo" class="h-14 w-14 animate-pulse" />
     </div>
-  </nav>
-  <!-- Page content -->
-  <div id="container"></div>
-  <script>
-    // --- Helpers ---
-    function showLoading(show=true) {
-      document.getElementById('loading').style.display = show ? "flex" : "none";
-    }
-    function showToast(msg, duration=2300) {
-      let toast = document.getElementById('toast');
-      toast.innerText = msg;
-      toast.classList.add('show');
-      setTimeout(()=>toast.classList.remove('show'), duration);
-    }
-    function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
-    function formatDate(d) {
-      if (!d) return "";
-      d = new Date(d);
-      let y = d.getFullYear(), m = d.getMonth()+1, da = d.getDate();
-      return [y, (m+"").padStart(2,"0"), (da+"").padStart(2,"0")].join('-');
-    }
-    // --- Auth/Users ---
-    let user = JSON.parse(localStorage.getItem('venxx-user') || "null");
-    let users = JSON.parse(localStorage.getItem('venxx-users') || "[]");
-    // Only for demo: default admin
-    if (!users.find(u=>u.username==="admin")) {
-      users.push({username:"admin",password:"admin123",admin:true});
-      localStorage.setItem('venxx-users', JSON.stringify(users));
-    }
-    function saveUsers() { localStorage.setItem('venxx-users', JSON.stringify(users)); }
-    function saveUser() { localStorage.setItem('venxx-user', JSON.stringify(user)); }
-    function signUp(username, password) {
-      if (users.find(u=>u.username===username)) return "Username already exists";
-      users.push({username, password, admin: false});
-      saveUsers();
-      return true;
-    }
-    function signIn(username, password) {
-      let u = users.find(u=>u.username===username && u.password===password);
-      if (!u) return "Invalid credentials";
-      user = {...u};
-      saveUser();
-      return true;
-    }
-    function signOut() {
-      user = null;
-      localStorage.removeItem('venxx-user');
-      showToast("Logged out!");
-      goto('auth');
-    }
-    // --- Digest Storage ---
-    function getDigests() {
-      return JSON.parse(localStorage.getItem('venxx-digests') || "[]");
-    }
-    function saveDigests(digests) {
-      localStorage.setItem('venxx-digests', JSON.stringify(digests));
-    }
-    // --- Navigation ---
-    function renderNav() {
-      let nav = document.getElementById('nav-links');
-      nav.innerHTML = "";
-      if (user) {
-        nav.innerHTML += `<button onclick="goto('home')" class="${page==='home'?'active':''}">Home</button>`;
-        if (user.admin)
-          nav.innerHTML += `<button onclick="goto('admin')" class="${page==='admin'?'active':''}">Admin</button>`;
-        nav.innerHTML += `<button onclick="signOut()">Logout</button>`;
-        nav.innerHTML += `<span style="color:var(--accent);font-weight:700;font-size:1em;padding-left:11px;">${user.admin?"Admin":"User"}: ${user.username}</span>`;
-      } else {
-        nav.innerHTML += `<button onclick="goto('auth')" class="${page==='auth'?'active':''}">Sign In</button>`;
-      }
-    }
-    // --- Page Rendering ---
-    let page = "auth";
-    async function goto(p) {
-      if (page===p) return;
-      showLoading(true);
-      await sleep(350 + Math.random()*200);
-      page = p;
-      renderNav();
-      document.getElementById('container').innerHTML = "";
-      if (p==='auth') renderAuth();
-      else if (p==='home') renderHome();
-      else if (p==='admin') renderAdmin();
-      showLoading(false);
-    }
-    // --- Auth Page ---
-    function renderAuth() {
-      document.getElementById('container').innerHTML = `
-        <div class="auth-panel" id="auth-panel">
-          <h2 id="auth-title">Sign In</h2>
-          <form id="auth-form">
-            <label for="auth-username">Username</label>
-            <input id="auth-username" type="text" autocomplete="username" required maxlength="16"/>
-            <label for="auth-password">Password</label>
-            <input id="auth-password" type="password" autocomplete="current-password" required maxlength="24"/>
-            <button type="submit" id="auth-btn">Sign In</button>
+    <h2 class="text-3xl font-extrabold text-center neon text-cyan-300 mb-3 tracking-tight" style="font-family:Orbitron,sans-serif">DiamondStudiesQuiz</h2>
+    <form id="student-login" class="space-y-4" onsubmit="login(event)">
+      <div class="float-label">
+        <input required id="student-username" placeholder=" " class="text-white" />
+        <label for="student-username">Student Username</label>
+      </div>
+      <button type="submit" class="w-full py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 font-bold text-gray-900 text-lg shadow-md transition pulse">Login</button>
+    </form>
+    <div id="login-feedback" class="text-center text-rose-400 font-bold"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden w-full max-w-2xl mx-auto p-4 fade-in">
+    <nav class="flex justify-between items-center mb-7">
+      <div class="flex items-center space-x-3">
+        <img src="https://img.icons8.com/fluency/40/quiz.png" alt="" />
+        <span class="font-extrabold text-2xl neon text-cyan-300" style="font-family:Orbitron,sans-serif">DiamondStudiesQuiz</span>
+      </div>
+      <div>
+        <span id="user-name" class="ml-2 font-semibold text-cyan-200"></span>
+        <button onclick="logout()" class="ml-6 px-4 py-1.5 bg-gray-900 border border-cyan-700 rounded-lg text-cyan-300 hover:bg-cyan-900 hover:text-cyan-100 transition">Logout</button>
+      </div>
+    </nav>
+    <!-- STUDENT PANEL -->
+    <div id="student-panel">
+      <div class="glass p-8 pop-in">
+        <h3 class="text-2xl font-bold neon text-cyan-200 mb-5 animate-bounce">Today's Quiz</h3>
+        <div id="no-questions" class="text-cyan-400">No quizzes available yet.</div>
+        <div id="quiz-area" class="hidden">
+          <form id="quiz-form" class="space-y-7">
+            <div id="quiz-questions" class="space-y-7"></div>
+            <button class="w-full py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 font-bold text-gray-900 shadow transition pulse" type="submit" id="next-btn">Next</button>
           </form>
-          <button class="switch-link" id="switch-auth">Don't have an account? Sign Up</button>
+        </div>
+        <div id="score-area" class="hidden text-center mt-7">
+          <div class="text-4xl font-extrabold neon text-cyan-200 mb-2 animate-bounce">Your Score:</div>
+          <div id="score-value" class="text-6xl font-extrabold text-cyan-400 neon"></div>
+          <button onclick="backToQuiz()" class="mt-6 px-7 py-2 rounded-lg bg-gray-900 border border-cyan-400 hover:bg-cyan-900 text-cyan-200 transition">Back to Quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div id="modal-bg" class="modal-bg fixed inset-0 z-40 hidden flex items-center justify-center">
+    <div id="modal" class="glass p-10 w-full max-w-sm">
+      <div id="modal-message" class="text-xl neon text-cyan-200 text-center mb-6"></div>
+      <div class="flex justify-center">
+        <button onclick="closeModal()" class="px-7 py-2 bg-cyan-400 hover:bg-cyan-300 rounded-lg text-gray-900 shadow font-bold text-lg">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- No Demo Questions ---
+    let userName = null;
+
+    // --- HELPERS ---
+    function showLoginFeedback(msg) { document.getElementById('login-feedback').innerText = msg; }
+    function login(e) {
+      e.preventDefault();
+      userName = document.getElementById('student-username').value.trim();
+      if (!userName) return showLoginFeedback("Please enter username.");
+      document.getElementById('login-container').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('user-name').innerText = userName;
+      loadQuiz();
+    }
+    function logout() {
+      userName = null;
+      document.getElementById('dashboard').classList.add('hidden');
+      document.getElementById('login-container').classList.remove('hidden');
+      document.getElementById('student-login').reset();
+      document.getElementById('login-feedback').innerText = '';
+    }
+    function showModal(msg) {
+      document.getElementById('modal-message').innerText = msg;
+      document.getElementById('modal-bg').classList.remove('hidden');
+    }
+    function closeModal() { document.getElementById('modal-bg').classList.add('hidden'); }
+
+    // --- QUESTIONS CRUD ---
+    function getQuestions() {
+      const userQs = JSON.parse(localStorage.getItem('quiz-questions') || '[]');
+      return [...userQs];
+    }
+    function saveStudentResult(student, score) {
+      let res = JSON.parse(localStorage.getItem('quiz-results')||'[]');
+      res.push({student, score, date: Date.now()});
+      localStorage.setItem('quiz-results', JSON.stringify(res));
+    }
+
+    // --- STUDENT: QUIZ LOGIC (ONE BY ONE WITH option color animation) ---
+    let currentQuestionIndex = 0;
+    let studentAnswers = [];
+    function loadQuiz() {
+      const qs = getQuestions();
+      const quizArea = document.getElementById('quiz-area');
+      const noQ = document.getElementById('no-questions');
+      if (!qs.length) { noQ.classList.remove('hidden'); quizArea.classList.add('hidden'); return; }
+      noQ.classList.add('hidden'); quizArea.classList.remove('hidden');
+      document.getElementById('score-area').classList.add('hidden');
+      currentQuestionIndex = 0;
+      studentAnswers = [];
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const qs = getQuestions();
+      const q = qs[currentQuestionIndex];
+      const quizQuestionsDiv = document.getElementById('quiz-questions');
+      quizQuestionsDiv.innerHTML = `
+        <div class="glass p-6 fade-in">
+          <div class="font-semibold text-lg neon text-cyan-200 mb-3 animate-bounce">${currentQuestionIndex+1}. ${q.text}</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="options-area">
+            ${q.options.map((opt,oi)=>`
+              <div>
+                <input required type="radio" name="qopt" id="q${currentQuestionIndex}o${oi}" value="${oi}" class="peer hidden option"/>
+                <label for="q${currentQuestionIndex}o${oi}" class="option-label block cursor-pointer px-4 py-2 rounded-lg border border-cyan-800 bg-gray-900 text-cyan-100 transition hover:scale-105 duration-200 pop-in">${opt}</label>
+              </div>
+            `).join('')}
+          </div>
         </div>
       `;
-      let signInMode = true;
-      document.getElementById('switch-auth').onclick = ()=>{
-        signInMode = !signInMode;
-        document.getElementById('auth-title').innerText = signInMode?"Sign In":"Sign Up";
-        document.getElementById('auth-btn').innerText = signInMode?"Sign In":"Sign Up";
-        document.getElementById('switch-auth').innerText = signInMode?"Don't have an account? Sign Up":"Already have an account? Sign In";
-      }
-      document.getElementById('auth-form').onsubmit = async (e)=>{
+      document.getElementById('next-btn').textContent = (currentQuestionIndex === getQuestions().length - 1) ? "Submit Quiz" : "Next";
+      document.getElementById('next-btn').disabled = true;
+      document.getElementById('next-btn').classList.remove('bg-green-500','bg-red-500','bg-cyan-400','hover:bg-cyan-300','pulse');
+      document.getElementById('next-btn').classList.add('bg-cyan-400','pulse');
+      // option select logic
+      document.querySelectorAll('input[name="qopt"]').forEach((radio,ix) => {
+        radio.addEventListener('change', function() {
+          // Remove previous classes
+          document.querySelectorAll('.option-label').forEach(l=>{
+            l.classList.remove('correct','wrong','selected');
+            l.style.pointerEvents = "auto";
+          });
+          // Get the correct option index
+          const correctIndex = q.answer;
+          const labels = document.querySelectorAll('.option-label');
+          // Mark selected
+          labels[ix].classList.add('selected');
+          // Show green/red for 1s, then enable next
+          setTimeout(()=>{
+            document.querySelectorAll('.option-label').forEach((label, idx) => {
+              if (idx === correctIndex) {
+                label.classList.add('correct');
+              } else if (radio.value == idx) {
+                if (idx !== correctIndex) label.classList.add('wrong');
+              }
+              label.style.pointerEvents = "none";
+            });
+            document.getElementById('next-btn').disabled = false;
+            if (Number(radio.value) === correctIndex) {
+              document.getElementById('next-btn').classList.remove('bg-cyan-400','bg-red-500');
+              document.getElementById('next-btn').classList.add('bg-green-500','pulse');
+            } else {
+              document.getElementById('next-btn').classList.remove('bg-cyan-400','bg-green-500');
+              document.getElementById('next-btn').classList.add('bg-red-500','pulse');
+            }
+          }, 160);
+        });
+      });
+      document.getElementById('quiz-form').onsubmit = function(e) {
         e.preventDefault();
-        let username = document.getElementById('auth-username').value.trim();
-        let password = document.getElementById('auth-password').value;
-        if (!username.match(/^[a-zA-Z0-9_]{3,16}$/)) {
-          showToast("Username: 3-16 chars, letters, numbers or _");
-          return;
-        }
-        showLoading(true);
-        await sleep(550);
-        if (signInMode) {
-          let res = signIn(username,password);
-          if (res!==true) {
-            showLoading(false); showToast(res); return;
-          }
-          showLoading(false);
-          showToast("Login Success!");
-          goto('home');
+        const selected = document.querySelector('input[name="qopt"]:checked');
+        if (!selected) return;
+        studentAnswers[currentQuestionIndex] = Number(selected.value);
+        if (currentQuestionIndex < getQuestions().length - 1) {
+          currentQuestionIndex++;
+          renderCurrentQuestion();
         } else {
-          if (password.length<6) {
-            showLoading(false); showToast("Password: at least 6 chars"); return;
-          }
-          let res = signUp(username,password);
-          if (res!==true) {
-            showLoading(false); showToast(res); return;
-          }
-          showLoading(false);
-          showToast("Sign up Success! Please sign in.");
-          signInMode = true;
-          document.getElementById('auth-title').innerText = "Sign In";
-          document.getElementById('auth-btn').innerText = "Sign In";
-          document.getElementById('switch-auth').innerText = "Don't have an account? Sign Up";
+          let score = 0;
+          getQuestions().forEach((q,ix)=>{
+            if (studentAnswers[ix] === q.answer) score++;
+          });
+          saveStudentResult(userName, score+"/"+getQuestions().length);
+          showStudentScore(score, getQuestions().length);
         }
-      };
-    }
-    // --- Home Page ---
-    function renderHome() {
-      let digests = getDigests();
-      if (!digests.length) {
-        document.getElementById('container').innerHTML = `<div style="text-align:center;margin-top:65px;font-size:1.2em;">No digests uploaded yet.</div>`;
-        return;
       }
-      let s = `<div class="digest-list">`;
-      digests.sort((a,b)=>b.uploadedAt-a.uploadedAt);
-      for (let d of digests) {
-        s += `
-          <div class="digest-card">
-            <div class="digest-title">${d.title}</div>
-            <div class="digest-desc">${d.desc}</div>
-            <div class="digest-meta">Uploaded: ${formatDate(d.uploadedAt)}</div>
-            <a class="digest-download" href="${d.url}" target="_blank" download>Download</a>
-          </div>
-        `;
-      }
-      s += `</div>`;
-      document.getElementById('container').innerHTML = s;
     }
-    // --- Admin Page ---
-    function renderAdmin() {
-      document
+
+    function showStudentScore(score, total) {
+      document.getElementById('quiz-area').classList.add('hidden');
+      document.getElementById('score-area').classList.remove('hidden');
+      document.getElementById('score-value').innerText = `${score} / ${total}`;
+    }
+    function backToQuiz() {
+      document.getElementById('score-area').classList.add('hidden');
+      document.getElementById('quiz-area').classList.remove('hidden');
+      loadQuiz();
+    }
+
+    window.logout = logout;
+    window.closeModal = closeModal;
+    window.backToQuiz = backToQuiz;
+  </script>
+</body>
+</html>
