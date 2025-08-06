@@ -1,81 +1,141 @@
-body { font-family: 'Montserrat', 'Orbitron', ui-sans-serif, system-ui, sans-serif; }
-.glass {
-  background: rgba(31,41,55,0.62);
-  box-shadow: 0 8px 32px 0 rgba(31,41,55,0.37);
-  backdrop-filter: blur(14px);
-  border-radius: 1.5rem;
-  border: 1px solid rgba(89,255,255,0.11);
+// --- No Demo Questions ---
+let userName = null;
+
+// --- HELPERS ---
+function showLoginFeedback(msg) { document.getElementById('login-feedback').innerText = msg; }
+function login(e) {
+  e.preventDefault();
+  userName = document.getElementById('student-username').value.trim();
+  if (!userName) return showLoginFeedback("Please enter username.");
+  document.getElementById('login-container').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('user-name').innerText = userName;
+  loadQuiz();
 }
-.neon {
-  text-shadow: 0 0 8px #00fff7, 0 0 2px #00fff7;
+function logout() {
+  userName = null;
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('login-container').classList.remove('hidden');
+  document.getElementById('student-login').reset();
+  document.getElementById('login-feedback').innerText = '';
 }
-.fade-in { animation: fade-in .7s cubic-bezier(.4,0,.2,1);}
-.pop-in { animation: pop-in .3s cubic-bezier(.4,1.7,.7,.9);}
-@keyframes fade-in { from { opacity:0; transform:translateY(30px);} to{opacity:1;transform:none;}}
-@keyframes pop-in { 0% {transform:scale(0.8);} 70% {transform:scale(1.1);} 100% {transform:scale(1);}}
-.modal-bg { background: rgba(17,24,39,0.93);}
-.float-label { position:relative;}
-.float-label input, .float-label select {
-  background:transparent;
-  border: none;
-  border-bottom: 2px solid #2dd4bf;
-  color: #fff;
-  outline: none;
-  width: 100%;
-  padding: 0.75rem 0 0.5rem 0.1rem;
-  font-size: 1rem;
-  transition: border-bottom-color .2s;
+function showModal(msg) {
+  document.getElementById('modal-message').innerText = msg;
+  document.getElementById('modal-bg').classList.remove('hidden');
 }
-.float-label label {
-  position:absolute; top:1rem; left:0.2rem;
-  color:#7dd3fc; pointer-events:none; font-size:1rem;
-  transition: .2s;
+function closeModal() { document.getElementById('modal-bg').classList.add('hidden'); }
+
+// --- QUESTIONS CRUD ---
+function getQuestions() {
+  const userQs = JSON.parse(localStorage.getItem('quiz-questions') || '[]');
+  return [...userQs];
 }
-.float-label input:focus + label,
-.float-label input:not(:placeholder-shown) + label,
-.float-label select:focus + label,
-.float-label select:not([value=""]) + label {
-  top:-0.45rem; font-size:0.82rem; color:#0fffc3;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+function saveStudentResult(student, score) {
+  let res = JSON.parse(localStorage.getItem('quiz-results')||'[]');
+  res.push({student, score, date: Date.now()});
+  localStorage.setItem('quiz-results', JSON.stringify(res));
 }
-::-webkit-scrollbar { width: 9px; }
-::-webkit-scrollbar-thumb { background: #164e63; border-radius: 99px;}
-/* Animation for correct/wrong */
-.option-label {
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, border-color 0.2s, transform .18s;
+
+// --- STUDENT: QUIZ LOGIC (ONE BY ONE WITH option color animation) ---
+let currentQuestionIndex = 0;
+let studentAnswers = [];
+function loadQuiz() {
+  const qs = getQuestions();
+  const quizArea = document.getElementById('quiz-area');
+  const noQ = document.getElementById('no-questions');
+  if (!qs.length) { noQ.classList.remove('hidden'); quizArea.classList.add('hidden'); return; }
+  noQ.classList.add('hidden'); quizArea.classList.remove('hidden');
+  document.getElementById('score-area').classList.add('hidden');
+  currentQuestionIndex = 0;
+  studentAnswers = [];
+  renderCurrentQuestion();
 }
-.option-label.correct {
-  background: #16f47b !important;
-  color: #111 !important;
-  border-color: #16f47b !important;
-  box-shadow: 0 0 18px #16f47bcc, 0 0 2px #16f47b;
-  animation: pop-in .3s;
+
+function renderCurrentQuestion() {
+  const qs = getQuestions();
+  const q = qs[currentQuestionIndex];
+  const quizQuestionsDiv = document.getElementById('quiz-questions');
+  quizQuestionsDiv.innerHTML = `
+    <div class="glass p-6 fade-in">
+      <div class="font-semibold text-lg neon text-cyan-200 mb-3 animate-bounce">${currentQuestionIndex+1}. ${q.text}</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="options-area">
+        ${q.options.map((opt,oi)=>`
+          <div>
+            <input required type="radio" name="qopt" id="q${currentQuestionIndex}o${oi}" value="${oi}" class="peer hidden option"/>
+            <label for="q${currentQuestionIndex}o${oi}" class="option-label block cursor-pointer px-4 py-2 rounded-lg border border-cyan-800 bg-gray-900 text-cyan-100 transition hover:scale-105 duration-200 pop-in">${opt}</label>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  document.getElementById('next-btn').textContent = (currentQuestionIndex === getQuestions().length - 1) ? "Submit Quiz" : "Next";
+  document.getElementById('next-btn').disabled = true;
+  document.getElementById('next-btn').classList.remove('bg-green-500','bg-red-500','bg-cyan-400','hover:bg-cyan-300','pulse');
+  document.getElementById('next-btn').classList.add('bg-cyan-400','pulse');
+  // option select logic
+  document.querySelectorAll('input[name="qopt"]').forEach((radio,ix) => {
+    radio.addEventListener('change', function() {
+      // Remove previous classes
+      document.querySelectorAll('.option-label').forEach(l=>{
+        l.classList.remove('correct','wrong','selected');
+        l.style.pointerEvents = "auto";
+      });
+      // Get the correct option index
+      const correctIndex = q.answer;
+      const labels = document.querySelectorAll('.option-label');
+      // Mark selected
+      labels[ix].classList.add('selected');
+      // Show green/red for 1s, then enable next
+      setTimeout(()=>{
+        document.querySelectorAll('.option-label').forEach((label, idx) => {
+          if (idx === correctIndex) {
+            label.classList.add('correct');
+          } else if (radio.value == idx) {
+            if (idx !== correctIndex) label.classList.add('wrong');
+          }
+          label.style.pointerEvents = "none";
+        });
+        document.getElementById('next-btn').disabled = false;
+        if (Number(radio.value) === correctIndex) {
+          document.getElementById('next-btn').classList.remove('bg-cyan-400','bg-red-500');
+          document.getElementById('next-btn').classList.add('bg-green-500','pulse');
+        } else {
+          document.getElementById('next-btn').classList.remove('bg-cyan-400','bg-green-500');
+          document.getElementById('next-btn').classList.add('bg-red-500','pulse');
+        }
+      }, 160);
+    });
+  });
+  document.getElementById('quiz-form').onsubmit = function(e) {
+    e.preventDefault();
+    const selected = document.querySelector('input[name="qopt"]:checked');
+    if (!selected) return;
+    studentAnswers[currentQuestionIndex] = Number(selected.value);
+    if (currentQuestionIndex < getQuestions().length - 1) {
+      currentQuestionIndex++;
+      renderCurrentQuestion();
+    } else {
+      let score = 0;
+      getQuestions().forEach((q,ix)=>{
+        if (studentAnswers[ix] === q.answer) score++;
+      });
+      saveStudentResult(userName, score+"/"+getQuestions().length);
+      showStudentScore(score, getQuestions().length);
+    }
+  }
 }
-.option-label.wrong {
-  background: #ff5454 !important;
-  color: #fff !important;
-  border-color: #ff5454 !important;
-  box-shadow: 0 0 18px #ff5454cc, 0 0 2px #ff5454;
-  animation: shake .35s;
+
+function showStudentScore(score, total) {
+  document.getElementById('quiz-area').classList.add('hidden');
+  document.getElementById('score-area').classList.remove('hidden');
+  document.getElementById('score-value').innerText = `${score} / ${total}`;
 }
-@keyframes shake {
-  0% {transform: translateX(0);}
-  20% {transform: translateX(-5px);}
-  40% {transform: translateX(5px);}
-  60% {transform: translateX(-5px);}
-  80% {transform: translateX(5px);}
-  100% {transform: translateX(0);}
+function backToQuiz() {
+  document.getElementById('score-area').classList.add('hidden');
+  document.getElementById('quiz-area').classList.remove('hidden');
+  loadQuiz();
 }
-.option-label.selected {
-  transform: scale(1.05);
-}
-/* Button pulse for Next */
-.pulse {
-  animation: pulse 1.1s infinite;
-}
-@keyframes pulse {
-  0% {box-shadow: 0 0 0 0 #00fff733;}
-  70% {box-shadow: 0 0 0 10px #00fff71a;}
-  100% {box-shadow: 0 0 0 0 #00fff700;}
-}
+
+window.logout = logout;
+window.closeModal = closeModal;
+window.backToQuiz = backToQuiz;
