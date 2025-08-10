@@ -21,9 +21,11 @@ if (checkoutNavBtn) checkoutNavBtn.addEventListener('click', openCheckout);
 if (closeCheckoutBtn) closeCheckoutBtn.addEventListener('click', closeCheckout);
 
 // Hide checkout on overlay click
-checkoutSection.addEventListener('click', (e) => {
-  if (e.target === checkoutSection) closeCheckout();
-});
+if (checkoutSection) {
+  checkoutSection.addEventListener('click', (e) => {
+    if (e.target === checkoutSection) closeCheckout();
+  });
+}
 
 // Contact form dummy handler
 const contactForm = document.querySelector('.contact-form');
@@ -36,14 +38,16 @@ if (contactForm) {
 }
 
 // Checkout form dummy handler
-const checkoutForm = checkoutSection.querySelector('.checkout-form');
-if (checkoutForm) {
-  checkoutForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    alert('Thank you for your order!');
-    closeCheckout();
-    checkoutForm.reset();
-  });
+if (checkoutSection) {
+  const checkoutForm = checkoutSection.querySelector('.checkout-form');
+  if (checkoutForm) {
+    checkoutForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      alert('Thank you for your order!');
+      closeCheckout();
+      checkoutForm.reset();
+    });
+  }
 }
 
 // FAQ toggle
@@ -67,3 +71,21 @@ function revealOnScroll() {
 }
 window.addEventListener('scroll', revealOnScroll);
 window.addEventListener('DOMContentLoaded', revealOnScroll);
+
+// Newsletter dummy submit
+const newsletterForm = document.querySelector('.newsletter-form');
+if (newsletterForm) {
+  newsletterForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    alert('Subscribed! Welcome to the Rovo family 🥳');
+    newsletterForm.reset();
+  });
+}
+
+// Add to cart dummy
+document.querySelectorAll('.add-to-cart').forEach(btn => {
+  btn.addEventListener('click', function () {
+    alert('Added to cart! Proceed to checkout when ready.');
+    openCheckout();
+  });
+});
