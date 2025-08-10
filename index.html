@@ -1,74 +1,138 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>DiamondStudiesQuiz</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rovo Dropships | AirPods</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
 </head>
-<body class="min-h-screen flex items-center justify-center">
-
-  <!-- LOGIN SCREEN -->
-  <div id="login-container" class="w-full max-w-md mx-auto glass p-10 mt-10 space-y-7 fade-in">
-    <div class="flex justify-center mb-5">
-      <!-- DiamondStudies logo (no pulse animation) -->
-      <img src="https://i.ibb.co/13DZsQB/make-a-3d-relastic-logo-name-of-diamondstudies.jpg" alt="DiamondStudies Logo" class="h-24 w-auto rounded-xl shadow-xl" />
-    </div>
-    <h2 class="text-3xl font-extrabold text-center neon text-cyan-300 mb-3 tracking-tight" style="font-family:Orbitron,sans-serif">DiamondStudiesQuiz</h2>
-    <form id="student-login" class="space-y-4" onsubmit="login(event)">
-      <div class="float-label">
-        <input required id="student-username" placeholder=" " class="text-white" />
-        <label for="student-username">Student Username</label>
-      </div>
-      <button type="submit" class="w-full py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 font-bold text-gray-900 text-lg shadow-md transition pulse">Login</button>
-    </form>
-    <div id="login-feedback" class="text-center text-rose-400 font-bold"></div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="dashboard" class="hidden w-full max-w-2xl mx-auto p-4 fade-in">
-    <nav class="flex justify-between items-center mb-7">
-      <div class="flex items-center space-x-3">
-        <img src="https://i.ibb.co/13DZsQB/make-a-3d-relastic-logo-name-of-diamondstudies.jpg" alt="DiamondStudies Logo" class="h-14 w-auto rounded shadow-md" />
-        <span class="font-extrabold text-2xl neon text-cyan-300" style="font-family:Orbitron,sans-serif">DiamondStudiesQuiz</span>
-      </div>
-      <div>
-        <span id="user-name" class="ml-2 font-semibold text-cyan-200"></span>
-        <button onclick="logout()" class="ml-6 px-4 py-1.5 bg-gray-900 border border-cyan-700 rounded-lg text-cyan-300 hover:bg-cyan-900 hover:text-cyan-100 transition">Logout</button>
-      </div>
-    </nav>
-    <!-- STUDENT PANEL -->
-    <div id="student-panel">
-      <div class="glass p-8 pop-in">
-        <h3 class="text-2xl font-bold neon text-cyan-200 mb-5 animate-bounce">Today's Quiz</h3>
-        <div id="no-questions" class="text-cyan-400">No quizzes available yet.</div>
-        <div id="quiz-area" class="hidden">
-          <form id="quiz-form" class="space-y-7">
-            <div id="quiz-questions" class="space-y-7"></div>
-            <button class="w-full py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 font-bold text-gray-900 shadow transition pulse" type="submit" id="next-btn">Next</button>
-          </form>
+<body>
+  <nav>
+    <div class="logo">Rovo Dropships</div>
+    <ul>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#features">Shop</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li>
+        <button class="shop-btn" id="checkoutNavBtn">Checkout</button>
+      </li>
+    </ul>
+  </nav>
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <span class="brand">AirPods</span><br />
+          <span class="byline">by Rovo Dropships</span>
+        </h1>
+        <div class="hero-desc">
+          Experience true wireless freedom with crystal-clear sound and seamless Apple-inspired design.
         </div>
-        <div id="score-area" class="hidden text-center mt-7">
-          <div class="text-4xl font-extrabold neon text-cyan-200 mb-2 animate-bounce">Your Score:</div>
-          <div id="score-value" class="text-6xl font-extrabold text-cyan-400 neon"></div>
-          <button onclick="backToQuiz()" class="mt-6 px-7 py-2 rounded-lg bg-gray-900 border border-cyan-400 hover:bg-cyan-900 text-cyan-200 transition">Back to Quiz</button>
+        <button class="shop-now" id="shopNowBtn">Shop Now</button>
+      </div>
+      <div class="hero-img">
+        <img src="https://assets-global.website-files.com/60e4a19d3d9e2e6f5f1e3eae/60e4a19d3d9e2e1e0e1e3eb2_airpods.png" alt="AirPods" />
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+      <h2>Product Features</h2>
+      <div class="features-list">
+        <div class="feature reveal">
+          <img src="https://img.icons8.com/ios-filled/50/2196f3/bluetooth.png" alt="Wireless" />
+          <h3>True Wireless</h3>
+          <p>No cables, no limits. Enjoy seamless Bluetooth connectivity wherever you go.</p>
+        </div>
+        <div class="feature reveal">
+          <img src="https://img.icons8.com/ios-filled/50/2196f3/battery--v2.png" alt="Battery" />
+          <h3>Long Battery Life</h3>
+          <p>Up to 24 hours of audio with the charging case. Power through your day effortlessly.</p>
+        </div>
+        <div class="feature reveal">
+          <img src="https://img.icons8.com/ios-filled/50/2196f3/speaker.png" alt="Sound" />
+          <h3>Rich Sound</h3>
+          <p>Crystal-clear audio, active noise cancellation, and deep bass for immersive listening.</p>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- MODALS -->
-  <div id="modal-bg" class="modal-bg fixed inset-0 z-40 hidden flex items-center justify-center">
-    <div id="modal" class="glass p-10 w-full max-w-sm">
-      <div id="modal-message" class="text-xl neon text-cyan-200 text-center mb-6"></div>
-      <div class="flex justify-center">
-        <button onclick="closeModal()" class="px-7 py-2 bg-cyan-400 hover:bg-cyan-300 rounded-lg text-gray-900 shadow font-bold text-lg">OK</button>
+    <!-- REVIEWS -->
+    <section class="reviews" id="reviews">
+      <h2>Customer Reviews</h2>
+      <div class="reviews-list">
+        <div class="review reveal">
+          <div class="reviewer">Emily R.</div>
+          <div class="review-comment">"Absolutely love my AirPods! Fast shipping and amazing quality."</div>
+        </div>
+        <div class="review reveal">
+          <div class="reviewer">Michael T.</div>
+          <div class="review-comment">"Best wireless earbuds I’ve owned. Highly recommend Rovo Dropships!"</div>
+        </div>
+        <div class="review reveal">
+          <div class="reviewer">Sara K.</div>
+          <div class="review-comment">"Checkout was easy and secure. The sound is incredible!"</div>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
 
+    <!-- FAQ -->
+    <section class="faq" id="about">
+      <h2>FAQs</h2>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <button class="faq-question">Are these AirPods genuine?</button>
+          <div class="faq-answer">We source all products from trusted suppliers to ensure quality and authenticity.</div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question">How long does shipping take?</button>
+          <div class="faq-answer">Shipping usually takes 7-14 days depending on your location.</div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question">Is checkout secure?</button>
+          <div class="faq-answer">Yes, we use industry-standard SSL encryption for all transactions.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <h2>Contact Us</h2>
+      <p>Have questions? Reach out to our support team!</p>
+      <form class="contact-form" autocomplete="off">
+        <input type="text" placeholder="Your Name" required />
+        <input type="email" placeholder="Email Address" required />
+        <textarea placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+      <div class="contact-info">
+        Email: <a href="mailto:support@rovodropships.com">support@rovodropships.com</a>
+      </div>
+    </section>
+
+    <!-- CHECKOUT -->
+    <section class="checkout" id="checkout">
+      <div class="checkout-content">
+        <button class="close-checkout" id="closeCheckoutBtn">&times;</button>
+        <h2>Secure Checkout</h2>
+        <form class="checkout-form" autocomplete="off">
+          <input type="text" placeholder="Full Name" required />
+          <input type="email" placeholder="Email Address" required />
+          <input type="text" placeholder="Shipping Address" required />
+          <input type="text" placeholder="Card Number" required maxlength="19" />
+          <input type="text" placeholder="Expiry Date (MM/YY)" required maxlength="5" />
+          <input type="text" placeholder="CVC" required maxlength="4" />
+          <button type="submit">Pay Securely</button>
+        </form>
+        <div class="secure-note">Your information is protected with <b>SSL encryption</b> <span class="lock">🔒</span></div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 Rovo Dropships. All rights reserved.
+  </footer>
   <script src="script.js"></script>
 </body>
 </html>
